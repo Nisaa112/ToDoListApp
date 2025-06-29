@@ -6,6 +6,7 @@ import 'package:to_do_list_app/page/favorit_page.dart';
 import 'package:to_do_list_app/page/home_page.dart';
 import 'package:to_do_list_app/page/kategori_page.dart';
 import 'package:to_do_list_app/page/label_page.dart';
+import 'package:to_do_list_app/page/login_page.dart';
 import 'package:to_do_list_app/page/pengaturan_page.dart';
 import 'package:to_do_list_app/page/pengingat_page.dart';
 import 'package:to_do_list_app/page/splashcreen.dart';
@@ -40,7 +41,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
         '/': (context) => Splashcreen(),
         '/home': (context) => HomePage(),
@@ -51,6 +52,7 @@ class MainApp extends StatelessWidget {
         '/arsip': (context) => ArsipPage(),
         '/label': (context) => LabelPage(),
         '/pengaturan': (context) => PengaturanPage(),
+        '/login': (context) => LoginPage(),
       },
     );
   }
