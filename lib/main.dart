@@ -8,6 +8,7 @@ import 'package:to_do_list_app/page/kategori_page.dart';
 import 'package:to_do_list_app/page/label_page.dart';
 import 'package:to_do_list_app/page/pengaturan_page.dart';
 import 'package:to_do_list_app/page/pengingat_page.dart';
+import 'package:to_do_list_app/page/splashcreen.dart';
 import 'package:to_do_list_app/page/user_page.dart';
 import 'package:to_do_list_app/viewmodel/kategori_viewmodel.dart';
 import 'package:to_do_list_app/viewmodel/label_viewmodel.dart';
@@ -39,8 +40,9 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
+      initialRoute: '/',
       routes: {
+        '/': (context) => Splashcreen(),
         '/home': (context) => HomePage(),
         '/pengguna': (context) => UserPage(),
         '/kategori': (context) => KategoriPage(),
