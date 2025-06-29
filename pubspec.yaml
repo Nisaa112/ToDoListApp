@@ -12,6 +12,7 @@ dependencies:
   http: ^1.4.0
   intl: ^0.20.2
   provider: ^6.1.5
+  toggle_switch: ^2.3.0
 
 dev_dependencies:
   flutter_test:

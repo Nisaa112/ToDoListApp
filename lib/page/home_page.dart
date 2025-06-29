@@ -146,25 +146,37 @@ class _HomePageState extends State<HomePage> {
                     contentPadding: EdgeInsets.only(left: 30),
                     leading: Icon(Icons.notifications, color: Color(0xFF485F88)),
                     title: Text('Pengingat'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/pengingat');
+                    },
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.only(left: 30),
                     leading: Icon(Icons.favorite, color: Color(0xFF485F88)),
                     title: Text('Favorit'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/favorit');
+                    },
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.only(left: 30),
                     leading: Icon(Icons.archive, color: Color(0xFF485F88)),
                     title: Text('Arsip'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/arsip');
+                    },
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.only(left: 30),
                     leading: Icon(Icons.label, color: Color(0xFF485F88)),
                     title: Text('Label'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/label');
+                    },
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.only(left: 30),
@@ -176,7 +188,10 @@ class _HomePageState extends State<HomePage> {
                     contentPadding: EdgeInsets.only(left: 30),
                     leading: Icon(Icons.settings, color: Color(0xFF485F88)),
                     title: Text('Pengaturan'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/pengaturan');
+                    },
                   ),
                 ],
               ),

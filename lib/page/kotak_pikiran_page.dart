@@ -3,14 +3,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list_app/viewmodel/tugas_viewmodel.dart';
 
-class FavoritPage extends StatefulWidget {
-  const FavoritPage({super.key});
+class KotakPikiranPage extends StatefulWidget {
+  const KotakPikiranPage({super.key});
 
   @override
-  State<FavoritPage> createState() => _FavoritPageState();
+  State<KotakPikiranPage> createState() => _KotakPikiranPageState();
 }
 
-class _FavoritPageState extends State<FavoritPage> {
+class _KotakPikiranPageState extends State<KotakPikiranPage> {
   @override
   Widget build(BuildContext context) {
     final tugasVM = Provider.of<TugasViewModel>(context);
@@ -29,7 +29,7 @@ class _FavoritPageState extends State<FavoritPage> {
             },
           ),
         ),
-        title: Text("Favorit", style: TextStyle(color: Colors.white),),
+        title: Text("Kotak Pikiran", style: TextStyle(color: Colors.white),),
         actions: [
           IconButton(
             icon: Icon(Icons.more_vert, color: Colors.white,),
