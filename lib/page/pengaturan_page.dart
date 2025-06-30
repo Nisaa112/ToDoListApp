@@ -28,7 +28,7 @@ class _PengaturanPageState extends State<PengaturanPage> {
             },
           ),
         ),
-        title: Text("Pengaturan", style: TextStyle(color: Colors.white),),
+        title: Text("Pengaturan", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
       ),
       body: Column(
         children: [

@@ -28,7 +28,7 @@ class _KategoriPageState extends State<KategoriPage> {
             },
           ),
         ),
-        title: Text("Pengingat", style: TextStyle(color: Colors.white),),
+        title: Text("Kategori", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
         actions: [
           IconButton(
             icon: Icon(Icons.more_vert, color: Colors.white,),
@@ -54,11 +54,11 @@ class _KategoriPageState extends State<KategoriPage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox(height: 16,),
+                      SizedBox(height: 20,),
                       Card(
                         color: Color(0xFF485F88),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -112,6 +112,16 @@ class _KategoriPageState extends State<KategoriPage> {
           ),
         ],
       ),
+      floatingActionButton: Transform.translate(
+        offset: Offset(5, -20), // ⬅️ X: ke kanan, Y: ke atas (minus)
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: Color(0xFF485F88),
+          child: Icon(Icons.add, color: Colors.white),
+          shape: CircleBorder(),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

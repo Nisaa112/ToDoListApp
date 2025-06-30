@@ -182,7 +182,10 @@ class _HomePageState extends State<HomePage> {
                     contentPadding: EdgeInsets.only(left: 30),
                     leading: Icon(Icons.bubble_chart, color: Color(0xFF485F88)),
                     title: Text('Kotak Pikiran'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/label');
+                    },
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.only(left: 30),
@@ -366,11 +369,17 @@ class _HomePageState extends State<HomePage> {
             children: [
               IconButton(
                 icon: Icon(Icons.home, color: Colors.white),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, "/home");
+                },
               ),
               IconButton(
                 icon: Icon(Icons.card_giftcard, color: Colors.white),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, "/kalender");
+                },
               ),
             ],
           ),

@@ -29,7 +29,7 @@ class _FavoritPageState extends State<FavoritPage> {
             },
           ),
         ),
-        title: Text("Favorit", style: TextStyle(color: Colors.white),),
+        title: Text("Favorit", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
         actions: [
           IconButton(
             icon: Icon(Icons.more_vert, color: Colors.white,),
@@ -54,7 +54,7 @@ class _FavoritPageState extends State<FavoritPage> {
               ? Center(child: Text("Tidak ada Tugas."),) 
               : Column(
                 children: [
-                  SizedBox(height: 16,),
+                  SizedBox(height: 20,),
                   Expanded(
                     child: ListView.builder(
                       itemCount: tugasVM.tugasList.length,
@@ -104,7 +104,7 @@ class _FavoritPageState extends State<FavoritPage> {
                                         ],
                                       ),
                                     ),
-                                    // ✅ Checkbox icon
+                                    // Checkbox icon
                                     IconButton(
                                       icon: Icon(
                                         (tugas.isChecked == true) ? Icons.check_box : Icons.check_box_outline_blank,
@@ -135,6 +135,16 @@ class _FavoritPageState extends State<FavoritPage> {
           )
         ],
       ),
+      floatingActionButton: Transform.translate(
+        offset: Offset(5, -20), // ⬅️ X: ke kanan, Y: ke atas (minus)
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: Color(0xFF485F88),
+          child: Icon(Icons.add, color: Colors.white),
+          shape: CircleBorder(),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

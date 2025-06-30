@@ -16,7 +16,7 @@ class _SplashcreenState extends State<Splashcreen> {
 
     // delay selama 3 detik
     Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacementNamed(context, '/home');
     });
   }
 
@@ -29,7 +29,7 @@ class _SplashcreenState extends State<Splashcreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset('assets/img/logo1.png', width: 20, height: 20,color: Color(0xFF485F88),),
-            SizedBox(height: 20),
+            SizedBox(height: 100),
             CircularProgressIndicator(),
           ],
         ),

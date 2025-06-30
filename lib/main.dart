@@ -4,9 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:to_do_list_app/page/arsip_page.dart';
 import 'package:to_do_list_app/page/favorit_page.dart';
 import 'package:to_do_list_app/page/home_page.dart';
+import 'package:to_do_list_app/page/kalender_page.dart';
 import 'package:to_do_list_app/page/kategori_page.dart';
+import 'package:to_do_list_app/page/kotak_pikiran_page.dart';
 import 'package:to_do_list_app/page/label_page.dart';
 import 'package:to_do_list_app/page/login_page.dart';
+import 'package:to_do_list_app/page/mood_page.dart';
 import 'package:to_do_list_app/page/pengaturan_page.dart';
 import 'package:to_do_list_app/page/pengingat_page.dart';
 import 'package:to_do_list_app/page/splashcreen.dart';
@@ -33,7 +36,6 @@ void main() async {
   );
 }
 
-
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
@@ -41,7 +43,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login',
+      initialRoute: '/home',
       routes: {
         '/': (context) => Splashcreen(),
         '/home': (context) => HomePage(),
@@ -53,7 +55,34 @@ class MainApp extends StatelessWidget {
         '/label': (context) => LabelPage(),
         '/pengaturan': (context) => PengaturanPage(),
         '/login': (context) => LoginPage(),
+        '/kalender': (context) => KalenderPage(),
+        '/mood': (context) => MoodPage(),
+        '/pikiran': (context) => KotakPikiranPage(),
       },
     );
   }
 }
+
+
+// import 'package:flutter/material.dart';
+// import 'package:to_do_list_app/page/mood_page.dart';
+
+// void main() {
+//   runApp(const MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       title: 'Mood Page Preview',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: MoodPage(), // ⬅️ tampilkan langsung MoodPage
+//     );
+//   }
+// }
