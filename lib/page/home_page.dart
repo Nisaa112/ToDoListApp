@@ -184,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                     title: Text('Kotak Pikiran'),
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/label');
+                      Navigator.pushNamed(context, '/pikiran');
                     },
                   ),
                   ListTile(

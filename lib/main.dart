@@ -10,6 +10,7 @@ import 'package:to_do_list_app/page/kotak_pikiran_page.dart';
 import 'package:to_do_list_app/page/label_page.dart';
 import 'package:to_do_list_app/page/login_page.dart';
 import 'package:to_do_list_app/page/mood_page.dart';
+import 'package:to_do_list_app/page/notes_page.dart';
 import 'package:to_do_list_app/page/pengaturan_page.dart';
 import 'package:to_do_list_app/page/pengingat_page.dart';
 import 'package:to_do_list_app/page/splashcreen.dart';
@@ -58,6 +59,7 @@ class MainApp extends StatelessWidget {
         '/kalender': (context) => KalenderPage(),
         '/mood': (context) => MoodPage(),
         '/pikiran': (context) => KotakPikiranPage(),
+        '/catatan': (context) => NotesPage(),
       },
     );
   }

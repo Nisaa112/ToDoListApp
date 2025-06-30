@@ -43,7 +43,6 @@ class _UserPageState extends State<UserPage> {
                 color: Color.fromRGBO(238, 241, 248, 1.0),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(50),
-                  topRight: Radius.circular(50),
                 ),
               ),
               padding: EdgeInsets.only(top: 30, left: 24, right: 24, bottom: 24),
@@ -51,11 +50,16 @@ class _UserPageState extends State<UserPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   // Avatar
-                  CircleAvatar(
-                    radius: 55,
-                    backgroundColor: Colors.grey.shade300,
-                    backgroundImage: NetworkImage(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf2hQMkanNHRB00g7rFrCm4gfpNdLvV2MUPg&s',
+                  GestureDetector(
+                    onTap: () {
+
+                    },
+                    child: CircleAvatar(
+                      radius: 55,
+                      backgroundColor: Colors.grey.shade300,
+                      backgroundImage: NetworkImage(
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf2hQMkanNHRB00g7rFrCm4gfpNdLvV2MUPg&s',
+                      ),
                     ),
                   ),
                   TextButton(

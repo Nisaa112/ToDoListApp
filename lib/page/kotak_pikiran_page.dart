@@ -138,7 +138,10 @@ class _KotakPikiranPageState extends State<KotakPikiranPage> {
       floatingActionButton: Transform.translate(
         offset: Offset(5, -20), // ⬅️ X: ke kanan, Y: ke atas (minus)
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/catatan');
+          },
           backgroundColor: Color(0xFF485F88),
           child: Icon(Icons.add, color: Colors.white),
           shape: CircleBorder(),
