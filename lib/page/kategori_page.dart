@@ -52,6 +52,7 @@ class _KategoriPageState extends State<KategoriPage> {
               child: Padding(
                 padding: EdgeInsets.all(16),
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
                       SizedBox(height: 20,),
@@ -92,7 +93,7 @@ class _KategoriPageState extends State<KategoriPage> {
                                   ),
                                   if (index != labelVM.labelList.length - 1)
                                     Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 8),
+                                      padding: EdgeInsets.symmetric(vertical: 0),
                                       child: Divider(
                                         thickness: 1,
                                         color: Colors.white30,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../viewmodel/kategori_viewmodel.dart';
@@ -25,18 +27,24 @@ class _HomePageState extends State<HomePage> {
     final kategoriVM = Provider.of<KategoriViewModel>(context, listen: false);
     if (_selectedKategoriId == null && kategoriVM.kategoriList.isNotEmpty) {
       _selectedKategoriId = kategoriVM.kategoriList.first.id;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {});
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final kategoriVM = Provider.of<KategoriViewModel>(context);
+    final kategoriList = kategoriVM.kategoriList;
     final tugasVM = Provider.of<TugasViewModel>(context);
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(238, 241, 248, 1.0),
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(238, 241, 248, 1.0),
+        scrolledUnderElevation: 0, //  matikan bayangan saat scroll
         elevation: 0,
         leading: Builder(
           builder: (context) => IconButton(
@@ -127,74 +135,112 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  Divider(
-                    color: Colors.grey,
-                    thickness: 1,
-                    indent: 20,     // jarak dari sisi kiri
-                    endIndent: 20,  // jarak dari sisi kanan
+                  Padding(
+                    padding: const EdgeInsets.only(top: 0, bottom: 7),
+                    child: Divider(
+                      color: Colors.grey,
+                      thickness: 1,
+                      indent: 20,     // jarak dari sisi kiri
+                      endIndent: 20,  // jarak dari sisi kanan
+                    ),
                   ),
-                  ListTile(
-                    contentPadding: EdgeInsets.only(left: 30),
-                    leading: Icon(Icons.dashboard_customize, color: Color(0xFF485F88)),
-                    title: Text('Semua Kategori'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/kategori');
-                    },
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: 265,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7)
+                      ),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.only(left: 20),
+                        leading: Icon(Icons.dashboard_customize, color: Color(0xFF485F88)),
+                        title: Text('Semua Kategori', style: TextStyle(fontSize: 15),),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, '/kategori');
+                        },
+                      ),
+                    ),
                   ),
-                  ListTile(
-                    contentPadding: EdgeInsets.only(left: 30),
-                    leading: Icon(Icons.notifications, color: Color(0xFF485F88)),
-                    title: Text('Pengingat'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/pengingat');
-                    },
+                  SizedBox(height: 10,),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: 265,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            contentPadding: EdgeInsets.only(left: 20),
+                            leading: Icon(Icons.notifications, color: Color(0xFF485F88)),
+                            title: Text('Pengingat', style: TextStyle(fontSize: 15)),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, '/pengingat');
+                            },
+                          ),
+                          ListTile(
+                            contentPadding: EdgeInsets.only(left: 20),
+                            leading: Icon(Icons.favorite, color: Color(0xFF485F88)),
+                            title: Text('Favorit', style: TextStyle(fontSize: 15)),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, '/favorit');
+                            },
+                          ),
+                          ListTile(
+                            contentPadding: EdgeInsets.only(left: 20),
+                            leading: Icon(Icons.archive, color: Color(0xFF485F88)),
+                            title: Text('Arsip', style: TextStyle(fontSize: 15)),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, '/arsip');
+                            },
+                          ),
+                          ListTile(
+                            contentPadding: EdgeInsets.only(left: 20),
+                            leading: Icon(Icons.label, color: Color(0xFF485F88)),
+                            title: Text('Label', style: TextStyle(fontSize: 15)),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, '/label');
+                            },
+                          ),
+                          ListTile(
+                            contentPadding: EdgeInsets.only(left: 20),
+                            leading: Icon(Icons.bubble_chart, color: Color(0xFF485F88)),
+                            title: Text('Kotak Pikiran', style: TextStyle(fontSize: 15)),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, '/pikiran');
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  ListTile(
-                    contentPadding: EdgeInsets.only(left: 30),
-                    leading: Icon(Icons.favorite, color: Color(0xFF485F88)),
-                    title: Text('Favorit'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/favorit');
-                    },
-                  ),
-                  ListTile(
-                    contentPadding: EdgeInsets.only(left: 30),
-                    leading: Icon(Icons.archive, color: Color(0xFF485F88)),
-                    title: Text('Arsip'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/arsip');
-                    },
-                  ),
-                  ListTile(
-                    contentPadding: EdgeInsets.only(left: 30),
-                    leading: Icon(Icons.label, color: Color(0xFF485F88)),
-                    title: Text('Label'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/label');
-                    },
-                  ),
-                  ListTile(
-                    contentPadding: EdgeInsets.only(left: 30),
-                    leading: Icon(Icons.bubble_chart, color: Color(0xFF485F88)),
-                    title: Text('Kotak Pikiran'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/pikiran');
-                    },
-                  ),
-                  ListTile(
-                    contentPadding: EdgeInsets.only(left: 30),
-                    leading: Icon(Icons.settings, color: Color(0xFF485F88)),
-                    title: Text('Pengaturan'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/pengaturan');
-                    },
+                  SizedBox(height: 10,),
+                  Align(
+                    child: Container(
+                      width: 265,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.only(left: 20),
+                        leading: Icon(Icons.settings, color: Color(0xFF485F88)),
+                        title: Text('Pengaturan', style: TextStyle(fontSize: 15)),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, '/pengaturan');
+                        },
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -223,169 +269,220 @@ class _HomePageState extends State<HomePage> {
 
       // kategori
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 35,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: kategoriVM.kategoriList.length,
-                itemBuilder: (context, index) {
-                  final kategori = kategoriVM.kategoriList[index];
-                  final isSelected = kategori.id == _selectedKategoriId;
-
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedKategoriId = kategori.id;
-                      });
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(right: 12),
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: isSelected ? Color(0xFF485F88) : Color(0xFF98A8C7),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Center(
-                        child: Text(
-                          kategori.nama,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+            Container(
+              height: 38,
+              padding: EdgeInsets.only(top: 7),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: kategoriList.length,
+                      itemBuilder: (context, index) {
+                        final kategori = kategoriList[index];
+                        final isSelected = kategori.id == _selectedKategoriId;
+                    
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedKategoriId = kategori.id;
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: isSelected ? Color(0xFF485F88) : Color.fromRGBO(157, 172, 205, 1.0),
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: Text(
+                                kategori.nama,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
-                  );
-                },
+                  ),
+                  SizedBox(width: 8,),
+                  IconButton(
+                    onPressed: () {
+                    },
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(), // Hapus batasan default
+                    icon: Iconify(
+                      Mdi.view_grid_outline,
+                      size: 25, // Ini penting, ubah sesuai ukuran yang kamu mau
+                      color: Colors.blueGrey,
+                    ),
+                  )
+                ],
               ),
             ),
+
 
             // list tugas
             const SizedBox(height: 16),
             Expanded(
               child: ListView.builder(
-                
+                // padding: const EdgeInsets.only(bottom: 100),
+                physics: const BouncingScrollPhysics(),
                 itemCount: tugasVM.tugasList.length,
                 itemBuilder: (context, index) {
                   final tugas = tugasVM.tugasList[index];
-                  print(tugas.isChecked.runtimeType); // untuk pastikan nilainya bool
                   final tanggalFormatted = DateFormat('dd MMMM yyyy', 'id_ID')
                       .format(tugas.tanggal); // bisa ganti dengan tugas.tanggal jika ada
 
-                  return Card(
-                    color: const Color(0xFF485F88),
-                    margin: const EdgeInsets.only(bottom: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Tanggal
-                          Text(
-                            tanggalFormatted,
-                            style: const TextStyle(color: Colors.white70, fontSize: 12),
-                          ),
-                          // const SizedBox(height: 8),
-                          // Tugas + Icon checkbox
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // Nama tugas + Garis
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      tugas.nama,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/detailtugas');
+                    },
+                    child: Card(
+                      color: const Color(0xFF485F88),
+                      margin: const EdgeInsets.only(bottom: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Tanggal
+                            Text(
+                              tanggalFormatted,
+                              style: const TextStyle(color: Colors.white70, fontSize: 12),
+                            ),
+                            // const SizedBox(height: 8),
+                            // Tugas + Icon checkbox
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // Nama tugas + Garis
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        tugas.nama,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Container(
-                                      height: 1,
-                                      width: null, // hanya sepanjang teks
-                                      color: Colors.white60,
-                                      margin: const EdgeInsets.only(right: 8),
-                                    ),
-                                  ],
+                                      const SizedBox(height: 2),
+                                      Container(
+                                        height: 1,
+                                        width: null, // hanya sepanjang teks
+                                        color: Colors.white60,
+                                        margin: const EdgeInsets.only(right: 8),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              // ✅ Checkbox icon
-                              IconButton(
-                                icon: Icon(
-                                  (tugas.isChecked == true) ? Icons.check_box : Icons.check_box_outline_blank,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  tugasVM.toggleCheckbox(index);
-                                },
-                              )
-                            ],
-                          ),
-                          // const SizedBox(height: 8),
-                          // 🧾 Deskripsi
-                          Text(
-                            tugas.deskripsi,
-                            style: const TextStyle(color: Colors.white70),
-                          ),
-                        ],
+                                // ✅ Checkbox icon
+                                IconButton(
+                                  icon: Icon(
+                                    (tugas.isChecked == true) ? Icons.check_box : Icons.check_box_outline_blank,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    tugasVM.toggleCheckbox(index);
+                                  },
+                                )
+                              ],
+                            ),
+                            // const SizedBox(height: 8),
+                            // 🧾 Deskripsi
+                            Text(
+                              tugas.deskripsi,
+                              style: const TextStyle(color: Colors.white70),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                    )
                   );
                 },
               ),
             )
-
-
           ],
         ),
       ),
       // FAB
-      extendBody: true, // biar FAB 'masuk' ke BottomAppBar
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Color(0xFF485F88),
-        child: Icon(Icons.add, color: Colors.white),
-        shape: CircleBorder(),
+      // extendBody: true, // biar FAB 'masuk' ke BottomAppBar
+      floatingActionButton: Container(
+        width: 55,
+        height: 55,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: Color.fromRGBO(238, 241, 248, 1.0),
+            width: 5,
+          ),
+        ),
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: Color(0xFF485F88),
+          elevation: 4, // tambahkan jika ingin efek bayangan
+          child: Icon(Icons.add, color: Colors.white),
+          shape: CircleBorder(),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(), // bentuk cekungan
-        notchMargin: 8, // jarak antara FAB dan AppBar
-        color: Color(0xFF485F88),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: Icon(Icons.home, color: Colors.white),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, "/home");
-                },
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Color.fromRGBO(238, 241, 248, 1.0),
+              width: 5
+            )
+          )
+        ),
+        child: SizedBox(
+          height: 60,
+          child: BottomAppBar(
+            shape: CircularNotchedRectangle(), // bentuk cekungan
+            notchMargin: 8, // jarak antara FAB dan AppBar
+            color: Color(0xFF485F88),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.home, color: Colors.white),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, "/home");
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.card_giftcard, color: Colors.white),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, "/kalender");
+                    },
+                  ),
+                ],
               ),
-              IconButton(
-                icon: Icon(Icons.card_giftcard, color: Colors.white),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, "/kalender");
-                },
-              ),
-            ],
+            ),
           ),
         ),
       ),
-
     );
   }
 }

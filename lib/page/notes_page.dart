@@ -72,7 +72,7 @@ class _NotesPageState extends State<NotesPage> {
                     const TextField(
                       decoration: InputDecoration(
                         hintText: "Judul",
-                        hintStyle: TextStyle(color: Colors.blueGrey),
+                        hintStyle: TextStyle(color: Colors.blueGrey, fontSize: 20),
                         border: UnderlineInputBorder(),
                       ),
                     ),
@@ -130,8 +130,6 @@ class _NotesPageState extends State<NotesPage> {
           ),
         ],
       ),
-
-
     );
   }
 }

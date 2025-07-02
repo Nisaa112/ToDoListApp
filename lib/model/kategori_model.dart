@@ -10,8 +10,9 @@ class KategoriModel {
   static List<KategoriModel> getKategoriList() {
     return [
       KategoriModel(id: 1, nama: "Semua"),
-      KategoriModel(id: 1, nama: "Pribadi"),
-      KategoriModel(id: 1, nama: "Pekerjaan"),
+      KategoriModel(id: 2, nama: "Pribadi"),
+      KategoriModel(id: 3, nama: "Pekerjaan"),
+      KategoriModel(id: 3, nama: "Rumah"),
     ];
   }
 }

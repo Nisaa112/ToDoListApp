@@ -57,74 +57,83 @@ class _KotakPikiranPageState extends State<KotakPikiranPage> {
                   SizedBox(height: 20,),
                   Expanded(
                     child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
                       itemCount: tugasVM.tugasList.length,
                       itemBuilder: (context, index) {
                         final tugas = tugasVM.tugasList[index];
                         final String tanggalFormatted = DateFormat('d MMMM yyyy', 'id_ID').format(tugas.tanggal);
                     
-                        return Card(
-                          color: const Color(0xFF485F88),
-                          margin: const EdgeInsets.only(bottom: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Tanggal
-                                Text(
-                                  tanggalFormatted,
-                                  style: const TextStyle(color: Colors.white70, fontSize: 12),
-                                ),
-                                // const SizedBox(height: 8),
-                                // Tugas + Icon checkbox
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    // Nama tugas + Garis
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            tugas.nama,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, '/detailtugas');
+                          },
+                          child: Card(
+                            color: const Color(0xFF485F88),
+                            margin: const EdgeInsets.only(bottom: 12),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Tanggal
+                                  Text(
+                                    tanggalFormatted,
+                                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                                  ),
+                                  // const SizedBox(height: 8),
+                                  // Tugas + Icon checkbox
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      // Nama tugas + Garis
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              tugas.nama,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(height: 2),
-                                          Container(
-                                            height: 1,
-                                            width: null, // hanya sepanjang teks
-                                            color: Colors.white60,
-                                            margin: const EdgeInsets.only(right: 8),
-                                          ),
-                                        ],
+                                            const SizedBox(height: 2),
+                                            Container(
+                                              height: 1,
+                                              width: null, // hanya sepanjang teks
+                                              color: Colors.white60,
+                                              margin: const EdgeInsets.only(right: 8),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    // ✅ Checkbox icon
-                                    IconButton(
-                                      icon: Icon(
-                                        (tugas.isChecked == true) ? Icons.check_box : Icons.check_box_outline_blank,
-                                        color: Colors.white,
-                                      ),
-                                      onPressed: () {
-                                        tugasVM.toggleCheckbox(index);
-                                      },
-                                    )
-                                  ],
-                                ),
-                                // const SizedBox(height: 8),
-                                // 🧾 Deskripsi
-                                Text(
-                                  tugas.deskripsi,
-                                  style: const TextStyle(color: Colors.white70),
-                                ),
-                              ],
+                                      // ✅ Checkbox icon
+                                      IconButton(
+                                        icon: Icon(
+                                          (tugas.isChecked == true) ? Icons.check_box : Icons.check_box_outline_blank,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () {
+                                          tugasVM.toggleCheckbox(index);
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                  // const SizedBox(height: 8),
+                                  // 🧾 Deskripsi
+                                  Text(
+                                    tugas.deskripsi,
+                                    style: const TextStyle(color: Colors.white70),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                          )
                         );
                       },
                     ),

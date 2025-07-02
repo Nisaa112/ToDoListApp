@@ -47,31 +47,37 @@ class _PengaturanPageState extends State<PengaturanPage> {
                 child: Column(
                   children: [
                     SizedBox(height: 20,),
-                    // BOX 1 - Pengaturan Pengguna
-                    Container(
-                      margin: EdgeInsets.only(bottom: 16),
-                      padding: EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
-                      width: 330,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.person, color: Colors.black),
-                          SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              "Pengaturan Pengguna",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                    // BOX 1 - Pengaturan Pengguna\
+                    InkWell(
+                      onTap: () {
+                        // Aksi ketika diklik
+                        Navigator.pushNamed(context, '/pengguna'); 
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 16),
+                        padding: EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+                        width: 330,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.person, color: Colors.black),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                "Pengaturan Pengguna",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
-                          ),
-                          Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-                        ],
+                            Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                          ],
+                        ),
                       ),
                     ),
 

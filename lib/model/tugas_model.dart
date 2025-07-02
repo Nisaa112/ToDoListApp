@@ -37,6 +37,12 @@ class TugasModel {
         deskripsi: 'Kerjain minimal sampai 50%',
         isChecked: false, // WAJIB disebut jika model nullable
       ),
+      TugasModel(
+        tanggal: DateTime(2025, 6, 28),
+        nama: 'Kerjain tugas sekolah',
+        deskripsi: 'ADSJFhkshdfkhsiaurahkhKHKFhkdsfkankfsjdaieuroiauoiauekasjfhkashdkfhkafhkmcbmxbzhdfakjhkhaisudrkhaldhflkasdhfaksdhfhdsfjhaskjdhfakjsdhfffmb',
+        isChecked: false, // WAJIB disebut jika model nullable
+      ),
     ];
   }
 }

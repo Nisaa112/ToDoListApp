@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list_app/page/arsip_page.dart';
+import 'package:to_do_list_app/page/detail_tugas_page.dart';
 import 'package:to_do_list_app/page/favorit_page.dart';
 import 'package:to_do_list_app/page/home_page.dart';
 import 'package:to_do_list_app/page/kalender_page.dart';
@@ -13,7 +14,7 @@ import 'package:to_do_list_app/page/mood_page.dart';
 import 'package:to_do_list_app/page/notes_page.dart';
 import 'package:to_do_list_app/page/pengaturan_page.dart';
 import 'package:to_do_list_app/page/pengingat_page.dart';
-import 'package:to_do_list_app/page/splashcreen.dart';
+// import 'package:to_do_list_app/page/splashcreen.dart';
 import 'package:to_do_list_app/page/user_page.dart';
 import 'package:to_do_list_app/viewmodel/kategori_viewmodel.dart';
 import 'package:to_do_list_app/viewmodel/label_viewmodel.dart';
@@ -46,7 +47,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/home',
       routes: {
-        '/': (context) => Splashcreen(),
+        // '/': (context) => Splashcreen(),
         '/home': (context) => HomePage(),
         '/pengguna': (context) => UserPage(),
         '/kategori': (context) => KategoriPage(),
@@ -60,6 +61,7 @@ class MainApp extends StatelessWidget {
         '/mood': (context) => MoodPage(),
         '/pikiran': (context) => KotakPikiranPage(),
         '/catatan': (context) => NotesPage(),
+        '/detailtugas': (context) => DetailTugasPage(),
       },
     );
   }
