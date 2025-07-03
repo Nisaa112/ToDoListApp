@@ -79,10 +79,9 @@ class TugasViewModel extends ChangeNotifier {
   void showTugasModal(BuildContext context) {
     bool showSubtask = false;
 
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      barrierDismissible: true,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
@@ -95,7 +94,7 @@ class TugasViewModel extends ChangeNotifier {
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color.fromRGBO(238, 241, 248, 1.0),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: SingleChildScrollView(
@@ -111,9 +110,12 @@ class TugasViewModel extends ChangeNotifier {
                         // 📝 TextField tugas utama
                         TextField(
                           decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
                             hintText: "Masukan tugas...",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
                             ),
                           ),
                         ),
@@ -132,6 +134,7 @@ class TugasViewModel extends ChangeNotifier {
                                           hintText: "Masukan tugas sampingan...",
                                           border: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(12),
+                                            borderSide: BorderSide.none,
                                           ),
                                         ),
                                       ),
@@ -152,32 +155,47 @@ class TugasViewModel extends ChangeNotifier {
                                 runSpacing: 8,
                                 children: [
                                   SizedBox(
-                                    width: 100,
+                                    width: 83,
+                                    height: 40,
                                     child: ChoiceChip(
                                       label: Text("Kategori", style: TextStyle(fontSize: 12),),
                                       selected: false,
                                       onSelected: (_) {},
+                                      backgroundColor: Colors.white,
                                     ),
                                   ),
-                                  ChoiceChip(
-                                    label: Text("Tugas baru"),
-                                    selected: showSubtask,
-                                    onSelected: (val) {
-                                      setState(() {
-                                        showSubtask = !showSubtask;
-                                      });
-                                    },
+                                  SizedBox(
+                                    width: 90,
+                                    height: 40,
+                                    child: ChoiceChip(
+                                      label: Text("Tugas baru", style: TextStyle(fontSize: 12),),
+                                      selected: showSubtask,
+                                      onSelected: (val) {
+                                        setState(() {
+                                          showSubtask = !showSubtask;
+                                        });
+                                      },
+                                      backgroundColor: Colors.white,
+                                    ),
                                   ),
-                                  ChoiceChip(
-                                    label: Text("Kesusahan"),
-                                    selected: false,
-                                    onSelected: (_) {},
+                                  SizedBox(
+                                    width: 90,
+                                    height: 40,
+                                    child: ChoiceChip(
+                                      label: Text("Kesusahan", style: TextStyle(fontSize: 12),),
+                                      selected: false,
+                                      onSelected: (_) {},
+                                      backgroundColor: Colors.white,
+                                    ),
                                   ),
-                                  ChoiceChip(
-                                    avatar: Icon(Icons.calendar_today, size: 16),
-                                    label: Text(""),
-                                    selected: false,
-                                    onSelected: (_) {},
+                                  SizedBox(
+                                    child: ChoiceChip(
+                                      avatar: Icon(Icons.calendar_today, size: 12),
+                                      label: Text(""),
+                                      selected: false,
+                                      onSelected: (_) {},
+                                      backgroundColor: Colors.transparent,
+                                    ),
                                   ),
                                 ],
                               ),
