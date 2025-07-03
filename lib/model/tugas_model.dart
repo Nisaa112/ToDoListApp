@@ -1,48 +1,48 @@
 class TugasModel {
-  final DateTime tanggal;
-  final String nama;
-  final String deskripsi;
+  int? id;
+  int? userId;
+  int? categoryId;
+  String? title;
+  String? difficult;
+  int? labelId;
+  String? dueDate;
+  String? date;
   bool? isChecked;
 
-  TugasModel({
-    required this.tanggal,
-    required this.nama,
-    required this.deskripsi,
-    this.isChecked,
-  });
+  TugasModel(
+      {this.id, 
+      this.userId,
+      this.categoryId,
+      this.title,
+      this.difficult,
+      this.labelId,
+      this.dueDate,
+      this.date,
+      this.isChecked});
 
-  static List<TugasModel> getTugasList() {
-    return[
-      TugasModel(
-        tanggal: DateTime(2025, 6, 24),
-        nama: 'Bersihin kamar',
-        deskripsi: 'Bersihin meja kamar',
-        isChecked: false, // WAJIB disebut jika model nullable
-      ),
-      TugasModel(
-        tanggal: DateTime(2025, 6, 25),
-        nama: 'Bersihin WC',
-        deskripsi: 'Bersihin semua WC',
-        isChecked: false, // WAJIB disebut jika model nullable
-      ),
-      TugasModel(
-        tanggal: DateTime(2025, 6, 27),
-        nama: 'Cuci motor',
-        deskripsi: 'Cuci motor nya sampe kinclong',
-        isChecked: false, // WAJIB disebut jika model nullable
-      ),
-      TugasModel(
-        tanggal: DateTime(2025, 6, 28),
-        nama: 'Kerjain Projek',
-        deskripsi: 'Kerjain minimal sampai 50%',
-        isChecked: false, // WAJIB disebut jika model nullable
-      ),
-      TugasModel(
-        tanggal: DateTime(2025, 6, 28),
-        nama: 'Kerjain tugas sekolah',
-        deskripsi: 'ADSJFhkshdfkhsiaurahkhKHKFhkdsfkankfsjdaieuroiauoiauekasjfhkashdkfhkafhkmcbmxbzhdfakjhkhaisudrkhaldhflkasdhfaksdhfhdsfjhaskjdhfakjsdhfffmb',
-        isChecked: false, // WAJIB disebut jika model nullable
-      ),
-    ];
+  TugasModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    userId = json['user_id'];
+    categoryId = json['category_id'];
+    title = json['title'];
+    difficult = json['difficult'];
+    labelId = json['label_id'];
+    dueDate = json['due_date'];
+    date = json['date'];
+    isChecked = json['is_checked'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (id != null) data['id'] = id;
+    data['user_id'] = this.userId;
+    data['category_id'] = this.categoryId;
+    data['title'] = this.title;
+    data['difficult'] = this.difficult;
+    data['label_id'] = this.labelId;
+    data['due_date'] = this.dueDate;
+    data['date'] = this.date;
+    data['is_checked'] = this.isChecked;
+    return data;
   }
 }

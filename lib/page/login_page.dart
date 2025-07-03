@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do_list_app/viewmodel/auth_viewmodel.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -8,6 +10,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _serialController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       TextField(
+                        controller: _serialController,
                         decoration: InputDecoration(
                           hintText: "Masukan Serial Number",
                           hintStyle: TextStyle(color: Colors.blueGrey),
@@ -76,6 +83,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       TextField(
+                        controller: _passwordController,
+                        // obscureText: true,
                         decoration: InputDecoration(
                           hintText: "Masukan Password",
                           hintStyle: TextStyle(color: Colors.blueGrey),
@@ -104,8 +113,20 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(10),
                             )
                           ),
-                          onPressed: () {
-                            
+                          onPressed: () async {
+                            final authVM = Provider.of<AuthViewModel>(context, listen: false);
+                            final success = await authVM.login(
+                              _serialController.text.trim(),
+                              _passwordController.text.trim(),
+                            );
+
+                            if (success) {
+                              Navigator.pushReplacementNamed(context, '/home'); // atau sesuai route kamu
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(authVM.errorMessage ?? "Login gagal")),
+                              );
+                            }
                           },
                           child: Text("Login", style: TextStyle(color: Colors.white, fontSize: 17)),
                         ),

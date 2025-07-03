@@ -55,7 +55,7 @@ class _LabelPageState extends State<LabelPage> {
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      SizedBox(height: 20,),
+                      SizedBox(height: 20),
                       Card(
                         color: Color(0xFF485F88),
                         shape: RoundedRectangleBorder(
@@ -63,46 +63,60 @@ class _LabelPageState extends State<LabelPage> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                          child: Column(
-                            children: List.generate(labelVM.labelList.length, (index) {
-                              final label = labelVM.labelList[index];
-                      
-                              return Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.tag, color: Colors.white),
-                                      SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text(
-                                          label.nama,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      IconButton(
-                                        icon: Icon(Icons.more_vert, color: Colors.white),
-                                        onPressed: () {
-                                          
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  if (index != labelVM.labelList.length - 1)
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 0),
-                                      child: Divider(
-                                        thickness: 1,
-                                        color: Colors.white30,
+                          child: labelVM.labelList.isEmpty
+                              ? Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 20),
+                                    child: Text(
+                                      "Tidak ada label.",
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 14,
+                                        fontStyle: FontStyle.italic,
                                       ),
                                     ),
-                                ],
-                              );
-                            }),
-                          ),
+                                  ),
+                                )
+                              : Column(
+                                  children: List.generate(labelVM.labelList.length, (index) {
+                                    final label = labelVM.labelList[index];
+
+                                    return Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(Icons.tag, color: Colors.white),
+                                            SizedBox(width: 12),
+                                            Expanded(
+                                              child: Text(
+                                                label.nama,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            IconButton(
+                                              icon: Icon(Icons.more_vert, color: Colors.white),
+                                              onPressed: () {
+                                                // aksi tombol
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                        if (index != labelVM.labelList.length - 1)
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(vertical: 0),
+                                            child: Divider(
+                                              thickness: 1,
+                                              color: Colors.white30,
+                                            ),
+                                          ),
+                                      ],
+                                    );
+                                  }),
+                                ),
                         ),
                       ),
                     ],
@@ -110,7 +124,7 @@ class _LabelPageState extends State<LabelPage> {
                 ),
               ),
             ),
-          ),
+          )
         ],
       ),
       floatingActionButton: Transform.translate(

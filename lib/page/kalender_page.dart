@@ -32,7 +32,7 @@ class _KalenderPageState extends State<KalenderPage> {
             },
           ),
         ),
-        title: Text("Kalender", style: TextStyle(color: Color(0xFF485F88), fontWeight: FontWeight.bold),),
+        title: Text("Kalender", style: TextStyle(color: Color(0xFF485F88), fontWeight: FontWeight.w900),),
         actions: [
           IconButton(
             icon: Icon(Icons.more_vert, color: Color(0xFF485F88),),
@@ -92,113 +92,121 @@ class _KalenderPageState extends State<KalenderPage> {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color(0xFF485F88),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(50)
-                  )
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Color(0xFF485F88),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50),
                 ),
-                padding: EdgeInsets.all(16),
-                child: tugasVM.tugasList.isEmpty 
-                ? Center(child: Text("Tidak ada Tugas."),) 
-                : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding( 
+                    padding: EdgeInsets.only(top: 15, left: 12),
+                    child: Text(
                       "Tugas",
-                      style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 16,),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: tugasVM.tugasList.length,
-                        itemBuilder: (context, index) {
-                          final tugas = tugasVM.tugasList[index];
-                          final String tanggalFormatted = DateFormat('d MMMM yyyy', 'id_ID').format(tugas.tanggal);
-
-                          return InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.pushNamed(context, '/detailtugas');
-                            },
-                            child: Card(
-                              color: Color.fromRGBO(238, 241, 248, 1.0),
-                              margin: const EdgeInsets.only(bottom: 12),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Tanggal
-                                    Text(
-                                      tanggalFormatted,
-                                      style: const TextStyle(color: Colors.blueGrey, fontSize: 12),
-                                    ),
-                                    // const SizedBox(height: 8),
-                                    // Tugas + Icon checkbox
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        // Nama tugas + Garis
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                tugas.nama,
-                                                style: const TextStyle(
-                                                  color: Color(0xFF485F88),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 2),
-                                              Container(
-                                                height: 1,
-                                                width: null, // hanya sepanjang teks
-                                                color: Colors.blueGrey,
-                                                margin: const EdgeInsets.only(right: 8),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        // Checkbox icon
-                                        IconButton(
-                                          icon: Icon(
-                                            (tugas.isChecked == true) ? Icons.check_box : Icons.check_box_outline_blank,
-                                            color: Color(0xFF485F88),
-                                          ),
-                                          onPressed: () {
-                                            tugasVM.toggleCheckbox(index);
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                    // const SizedBox(height: 8),
-                                    // 🧾 Deskripsi
-                                    Text(
-                                      tugas.deskripsi,
-                                      style: const TextStyle(color: Colors.blueGrey),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          );
-                        },
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-                ) 
+                  ),
+                  SizedBox(height: 16),
+
+                  // Tampilkan daftar atau pesan kosong
+                  Expanded(
+                    child: tugasVM.tugasList.isEmpty
+                        ? Center(
+                            child: Text(
+                              "Tidak ada Tugas.",
+                              style: TextStyle(color: Colors.white70),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: tugasVM.tugasList.length,
+                            itemBuilder: (context, index) {
+                              final tugas = tugasVM.tugasList[index];
+                              final tanggalFormatted = tugas.date != null
+                                  ? DateFormat('d MMMM yyyy', 'id_ID')
+                                      .format(DateTime.parse(tugas.date!))
+                                  : '-';
+
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Navigator.pushNamed(context, '/detailtugas');
+                                },
+                                child: Card(
+                                  color: Color.fromRGBO(238, 241, 248, 1.0),
+                                  margin: const EdgeInsets.only(bottom: 12),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          tanggalFormatted,
+                                          style: const TextStyle(
+                                            color: Colors.blueGrey,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    tugas.title ?? '',
+                                                    style: const TextStyle(
+                                                      color: Color(0xFF485F88),
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 2),
+                                                  Container(
+                                                    height: 1,
+                                                    color: Colors.blueGrey,
+                                                    margin: const EdgeInsets.only(right: 8),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            IconButton(
+                                              icon: Icon(
+                                                (tugas.isChecked == true)
+                                                    ? Icons.check_box
+                                                    : Icons.check_box_outline_blank,
+                                                color: Colors.white,
+                                              ),
+                                              onPressed: () {
+                                                tugasVM.toggleCheckbox(index);
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                ],
               ),
             ),
           )
+
         ],
       ),
     );
