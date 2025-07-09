@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do_list_app/viewmodel/theme_viewmodel.dart';
 
 class PengaturanPage extends StatefulWidget {
   const PengaturanPage({super.key});
@@ -217,32 +219,74 @@ class _PengaturanPageState extends State<PengaturanPage> {
                     ),
 
                     // BOX 5
-                    Container(
-                      margin: EdgeInsets.only(bottom: 16),
-                      padding: EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
-                      width: 330,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.brightness_6, color: Colors.black),
-                          SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              "Tema Aplikasi",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            final themeVM = Provider.of<ThemeViewModel>(context, listen: false);
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                              title: const Text("Pilih Tema"),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListTile(
+                                    leading: const Icon(Icons.light_mode),
+                                    title: const Text("Terang"),
+                                    onTap: () {
+                                      themeVM.setLightTheme();
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(Icons.dark_mode),
+                                    title: const Text("Gelap"),
+                                    onTap: () {
+                                      // themeVM.setDarkTheme();
+                                      // Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                        width: 330,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.brightness_6, color: Colors.black),
+                            const SizedBox(width: 12),
+                            const Expanded(
+                              child: Text(
+                                "Tema Aplikasi",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
-                          ),
-                          Text("Gelap", style: TextStyle(color: Colors.blueGrey),)
-                        ],
+                            Consumer<ThemeViewModel>(
+                              builder: (context, themeVM, _) {
+                                final mode = themeVM.themeMode;
+                                final text = mode == ThemeMode.dark ? "Gelap" : "Terang";
+                                return Text(text, style: const TextStyle(color: Colors.blueGrey));
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                    )
+
                   ],
                 ),
               ),

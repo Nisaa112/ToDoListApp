@@ -1,13 +1,14 @@
-class LabelModel {
+class KategoriUserModel {
   String? name;
   int? userId;
   String? updatedAt;
   String? createdAt;
   int? id;
 
-  LabelModel({this.name, this.userId, this.updatedAt, this.createdAt, this.id});
+  KategoriUserModel(
+      {this.name, this.userId, this.updatedAt, this.createdAt, this.id});
 
-  LabelModel.fromJson(Map<String, dynamic> json) {
+  KategoriUserModel.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     userId = json['user_id'];
     updatedAt = json['updated_at'];

@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:to_do_list_app/model/login_response.dart';
 
 class AuthService {
-  static const String baseUrl = 'https://cockatoo-electric-unduly.ngrok-free.app/api/login';
+  static const String baseUrl = 'https://cockatoo-electric-unduly.ngrok-free.app/api/auth/login';
 
   static Future<LoginResponseModel> login(String serial, String password) async {
     final response = await http.post(

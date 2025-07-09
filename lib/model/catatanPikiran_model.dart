@@ -1,15 +1,23 @@
-class LabelModel {
-  String? name;
+class CatatanPikiranModel {
   int? userId;
+  String? judul;
+  String? isi;
   String? updatedAt;
   String? createdAt;
   int? id;
 
-  LabelModel({this.name, this.userId, this.updatedAt, this.createdAt, this.id});
+  CatatanPikiranModel(
+      {this.userId,
+      this.judul,
+      this.isi,
+      this.updatedAt,
+      this.createdAt,
+      this.id});
 
-  LabelModel.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
+  CatatanPikiranModel.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
+    judul = json['judul'];
+    isi = json['isi'];
     updatedAt = json['updated_at'];
     createdAt = json['created_at'];
     id = json['id'];
@@ -17,8 +25,9 @@ class LabelModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
     data['user_id'] = this.userId;
+    data['judul'] = this.judul;
+    data['isi'] = this.isi;
     data['updated_at'] = this.updatedAt;
     data['created_at'] = this.createdAt;
     data['id'] = this.id;

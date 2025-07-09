@@ -1,10 +1,10 @@
-class TugasSampinganModel {
+class UlangiTugasModel {
   String? message;
   Data? data;
 
-  TugasSampinganModel({this.message, this.data});
+  UlangiTugasModel({this.message, this.data});
 
-  TugasSampinganModel.fromJson(Map<String, dynamic> json) {
+  UlangiTugasModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
@@ -21,24 +21,30 @@ class TugasSampinganModel {
 
 class Data {
   int? todoId;
-  String? title;
-  bool? isDone;
+  String? repeatType;
+  int? intervalDays;
+  String? startDate;
+  String? endDate;
   String? updatedAt;
   String? createdAt;
   int? id;
 
   Data(
       {this.todoId,
-      this.title,
-      this.isDone,
+      this.repeatType,
+      this.intervalDays,
+      this.startDate,
+      this.endDate,
       this.updatedAt,
       this.createdAt,
       this.id});
 
   Data.fromJson(Map<String, dynamic> json) {
     todoId = json['todo_id'];
-    title = json['title'];
-    isDone = json['is_done'];
+    repeatType = json['repeat_type'];
+    intervalDays = json['interval_days'];
+    startDate = json['start_date'];
+    endDate = json['end_date'];
     updatedAt = json['updated_at'];
     createdAt = json['created_at'];
     id = json['id'];
@@ -47,8 +53,10 @@ class Data {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['todo_id'] = this.todoId;
-    data['title'] = this.title;
-    data['is_done'] = this.isDone;
+    data['repeat_type'] = this.repeatType;
+    data['interval_days'] = this.intervalDays;
+    data['start_date'] = this.startDate;
+    data['end_date'] = this.endDate;
     data['updated_at'] = this.updatedAt;
     data['created_at'] = this.createdAt;
     data['id'] = this.id;

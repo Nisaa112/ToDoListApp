@@ -2,29 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list_app/model/tugas_model.dart';
+import 'package:to_do_list_app/viewmodel/kategori_viewmodel.dart';
+import 'package:to_do_list_app/viewmodel/label_viewmodel.dart';
+import 'package:to_do_list_app/viewmodel/tugasSampingan_viewmodel.dart';
 import 'package:to_do_list_app/viewmodel/tugas_viewmodel.dart';
 
-class ArsipPage extends StatefulWidget {
-  const ArsipPage({super.key});
+class TugaslabelPage extends StatefulWidget {
+  const TugaslabelPage({super.key});
 
   @override
-  State<ArsipPage> createState() => _ArsipPageState();
+  State<TugaslabelPage> createState() => _TugaslabelPageState();
 }
 
-class _ArsipPageState extends State<ArsipPage> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      Provider.of<TugasViewModel>(context, listen: false).fetchTugas();
-    });
-  }
-
+class _TugaslabelPageState extends State<TugaslabelPage> {
   @override
   Widget build(BuildContext context) {
     final tugasVM = Provider.of<TugasViewModel>(context);
-    final tugasArsipList =
-        tugasVM.tugasList.where((tugas) => tugas.isArchived == true).toList();
+    final tugasSampinganVM = Provider.of<TugasSampinganViewModel>(context);
+    final labelVM = Provider.of<LabelViewModel>(context);
+
+    // Ambil labelId dari arguments
+    final int labelId = ModalRoute.of(context)!.settings.arguments as int;
+
+    // Filter tugas berdasarkan labelId
+    final List<TugasModel> filteredTugas = tugasVM.tugasList
+        .where((tugas) => tugas.labelId == labelId)
+        .toList();
+
+
+    // Ambil nama label
+    final namaLabel = labelVM.labelList
+        .firstWhere((k) => k.id == labelId, orElse: () => labelVM.labelList.first)
+        .name;
+
+
 
     return Scaffold(
       backgroundColor: const Color(0xFF485F88),
@@ -34,12 +45,12 @@ class _ArsipPageState extends State<ArsipPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pop(context);
           },
         ),
-        title: const Text(
-          "Arsip",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        title: Text(
+          namaLabel ?? "Tugas Label",
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         actions: [
           IconButton(
@@ -54,34 +65,26 @@ class _ArsipPageState extends State<ArsipPage> {
           borderRadius: BorderRadius.only(topRight: Radius.circular(50)),
         ),
         padding: const EdgeInsets.all(16),
-        child: tugasArsipList.isEmpty
-            ? const Center(
-                child: Text(
-                  "Tidak ada Tugas yang diarsipkan.",
-                  style: TextStyle(color: Colors.blueGrey),
-                ),
-              )
+        child: filteredTugas.isEmpty
+            ? const Center(child: Text("Tidak ada Tugas.", style: TextStyle(color: Colors.blueGrey)))
             : ListView.builder(
                 physics: const BouncingScrollPhysics(),
-                itemCount: tugasArsipList.length,
+                itemCount: filteredTugas.length,
                 itemBuilder: (context, index) {
-                  final TugasModel tugas = tugasArsipList[index];
+                  final TugasModel tugas = filteredTugas[index];
 
                   final tanggalFormatted = tugas.date != null
-                      ? DateFormat('d MMMM yyyy', 'id_ID')
-                          .format(DateTime.parse(tugas.date!))
+                      ? DateFormat('d MMMM yyyy', 'id_ID').format(DateTime.parse(tugas.date!))
                       : '-';
 
                   return InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, '/detailtugas',
-                          arguments: {'tugas': tugas});
+                      Navigator.pushNamed(context, '/detailtugas', arguments: tugas.id);
                     },
                     child: Card(
                       color: const Color(0xFF485F88),
                       margin: const EdgeInsets.only(bottom: 12),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Column(
@@ -89,16 +92,14 @@ class _ArsipPageState extends State<ArsipPage> {
                           children: [
                             Text(
                               tanggalFormatted,
-                              style: const TextStyle(
-                                  color: Colors.white70, fontSize: 12),
+                              style: const TextStyle(color: Colors.white70, fontSize: 12),
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         tugas.title ?? '',
@@ -112,8 +113,14 @@ class _ArsipPageState extends State<ArsipPage> {
                                       Container(
                                         height: 1,
                                         color: Colors.white60,
-                                        margin:
-                                            const EdgeInsets.only(right: 8),
+                                        margin: const EdgeInsets.only(right: 8),
+                                      ),
+                                      Text(
+                                        '-', // Ganti jika kamu ingin munculkan info tugas sampingan
+                                        style: const TextStyle(
+                                          color: Colors.blueGrey,
+                                          fontSize: 12,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -126,36 +133,11 @@ class _ArsipPageState extends State<ArsipPage> {
                                     color: Colors.white,
                                   ),
                                   onPressed: () {
-                                    print(
-                                        '✅ Checkbox ditekan untuk tugas dengan ID: ${tugas.id}');
-                                    print('Sebelum: ${tugas.isChecked}');
-
-                                    tugasVM.toggleCheckboxById(tugas.id!);
-
-                                    print(
-                                        'Sesudah: ${tugasVM.tugasList.firstWhere((t) => t.id == tugas.id).isChecked}');
+                                    tugasVM.toggleCheckbox(index);
                                   },
                                 )
                               ],
                             ),
-                            if (tugas.difficult != null)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4.0),
-                                child: Text(
-                                  'Kesulitan: ${tugas.difficult}',
-                                  style: const TextStyle(
-                                      color: Colors.white70, fontSize: 12),
-                                ),
-                              ),
-                            if (tugas.dueDate != null)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 2.0),
-                                child: Text(
-                                  'Batas Waktu: ${tugas.dueDate}',
-                                  style: const TextStyle(
-                                      color: Colors.white70, fontSize: 12),
-                                ),
-                              ),
                           ],
                         ),
                       ),
@@ -167,7 +149,9 @@ class _ArsipPageState extends State<ArsipPage> {
       floatingActionButton: Transform.translate(
         offset: const Offset(5, -20),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            // Arahkan ke halaman tambah tugas kategori, jika ada
+          },
           backgroundColor: const Color(0xFF485F88),
           child: const Icon(Icons.add, color: Colors.white),
           shape: const CircleBorder(),

@@ -14,6 +14,27 @@ class KalenderPage extends StatefulWidget {
 class _KalenderPageState extends State<KalenderPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  List filteredTugas = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final tugasVM = Provider.of<TugasViewModel>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final today = DateTime.now();
+      setState(() {
+        _selectedDay = today;
+        filteredTugas = tugasVM.tugasList.where((tugas) {
+          if (tugas.date == null) return false;
+          final tugasDate = DateTime.tryParse(tugas.date!);
+          if (tugasDate == null) return false;
+          return tugasDate.year == today.year &&
+                tugasDate.month == today.month &&
+                tugasDate.day == today.day;
+        }).toList();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +74,22 @@ class _KalenderPageState extends State<KalenderPage> {
               selectedDayPredicate: (day) {
                 return isSameDay(_selectedDay, day);
               },
-              onDaySelected: (selectedDay, focuseDay) {
+              onDaySelected: (selectedDay, focusedDay) {
                 setState(() {
                   _selectedDay = selectedDay;
-                  _focusedDay = focuseDay;
+                  _focusedDay = focusedDay;
+
+                  filteredTugas = tugasVM.tugasList.where((tugas) {
+                    if (tugas.date == null) return false;
+                    final tugasDate = DateTime.tryParse(tugas.date!);
+                    if (tugasDate == null) return false;
+                    return tugasDate.year == selectedDay.year &&
+                          tugasDate.month == selectedDay.month &&
+                          tugasDate.day == selectedDay.day;
+                  }).toList();
                 });
               },
+
               calendarStyle: CalendarStyle(
                 todayDecoration: BoxDecoration(
                   color: Color(0xFF485F88),
@@ -118,7 +149,7 @@ class _KalenderPageState extends State<KalenderPage> {
 
                   // Tampilkan daftar atau pesan kosong
                   Expanded(
-                    child: tugasVM.tugasList.isEmpty
+                    child: (_selectedDay == null || filteredTugas.isEmpty)
                         ? Center(
                             child: Text(
                               "Tidak ada Tugas.",
@@ -126,9 +157,9 @@ class _KalenderPageState extends State<KalenderPage> {
                             ),
                           )
                         : ListView.builder(
-                            itemCount: tugasVM.tugasList.length,
+                            itemCount: filteredTugas.length,
                             itemBuilder: (context, index) {
-                              final tugas = tugasVM.tugasList[index];
+                              final tugas = filteredTugas[index];
                               final tanggalFormatted = tugas.date != null
                                   ? DateFormat('d MMMM yyyy', 'id_ID')
                                       .format(DateTime.parse(tugas.date!))
@@ -186,10 +217,15 @@ class _KalenderPageState extends State<KalenderPage> {
                                                 (tugas.isChecked == true)
                                                     ? Icons.check_box
                                                     : Icons.check_box_outline_blank,
-                                                color: Colors.white,
+                                                color: Color(0xFF485F88),
                                               ),
                                               onPressed: () {
+                                                print('✅ Checkbox ditekan untuk tugas dengan ID: ${tugas.id}');
+                                                print('Sebelum: ${tugas.isChecked}');
+
                                                 tugasVM.toggleCheckbox(index);
+
+                                                print('Sesudah: ${tugasVM.tugasList[index].isChecked}');
                                               },
                                             ),
                                           ],

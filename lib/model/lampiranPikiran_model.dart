@@ -1,10 +1,10 @@
-class TugasSampinganModel {
+class LampiranPikiranModel {
   String? message;
   Data? data;
 
-  TugasSampinganModel({this.message, this.data});
+  LampiranPikiranModel({this.message, this.data});
 
-  TugasSampinganModel.fromJson(Map<String, dynamic> json) {
+  LampiranPikiranModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
@@ -20,25 +20,28 @@ class TugasSampinganModel {
 }
 
 class Data {
-  int? todoId;
-  String? title;
-  bool? isDone;
+  int? userId;
+  String? catatanPikiranId;
+  String? filePath;
+  String? fileType;
   String? updatedAt;
   String? createdAt;
   int? id;
 
   Data(
-      {this.todoId,
-      this.title,
-      this.isDone,
+      {this.userId,
+      this.catatanPikiranId,
+      this.filePath,
+      this.fileType,
       this.updatedAt,
       this.createdAt,
       this.id});
 
   Data.fromJson(Map<String, dynamic> json) {
-    todoId = json['todo_id'];
-    title = json['title'];
-    isDone = json['is_done'];
+    userId = json['user_id'];
+    catatanPikiranId = json['catatan_pikiran_id'];
+    filePath = json['file_path'];
+    fileType = json['file_type'];
     updatedAt = json['updated_at'];
     createdAt = json['created_at'];
     id = json['id'];
@@ -46,9 +49,10 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['todo_id'] = this.todoId;
-    data['title'] = this.title;
-    data['is_done'] = this.isDone;
+    data['user_id'] = this.userId;
+    data['catatan_pikiran_id'] = this.catatanPikiranId;
+    data['file_path'] = this.filePath;
+    data['file_type'] = this.fileType;
     data['updated_at'] = this.updatedAt;
     data['created_at'] = this.createdAt;
     data['id'] = this.id;

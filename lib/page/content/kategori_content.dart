@@ -38,11 +38,10 @@ class _KategoriContentState extends State<KategoriContent> {
             ? const Center(
                 child: Text(
                   "Tidak ada kategori",
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                  style: TextStyle(color: Colors.blueGrey, fontSize: 16),
                 ),
               )
             : SingleChildScrollView(
-                // physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     const SizedBox(height: 30),
@@ -62,34 +61,42 @@ class _KategoriContentState extends State<KategoriContent> {
                                 final kategori = kategoriVM.kategoriList[index];
                                 return Column(
                                   children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                                      child: Row(
-                                        children: [
-                                          const Icon(Icons.tag, color: Colors.white, size: 20),
-                                          const SizedBox(width: 12),
-                                          Expanded(
-                                            child: Text(
-                                              kategori.name ?? '',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500,
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          '/tugasKategori',
+                                          arguments: kategori.id, 
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.tag, color: Colors.white, size: 20),
+                                            const SizedBox(width: 12),
+                                            Expanded(
+                                              child: Text(
+                                                kategori.name ?? '',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(Icons.delete, color: Colors.white),
-                                            onPressed: () {
-                                              final kategori = kategoriVM.kategoriList[index];
-                                              kategoriVM.showDeleteKategoriModal(
-                                                context,
-                                                kategori.id!,
-                                                kategori.name ?? '',
-                                              );
-                                            },
-                                          ),
-                                        ],
+                                            IconButton(
+                                              icon: const Icon(Icons.delete, color: Colors.white),
+                                              onPressed: () {
+                                                kategoriVM.showDeleteKategoriModal(
+                                                  context,
+                                                  kategori.id!,
+                                                  kategori.name ?? '',
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                     if (index != kategoriVM.kategoriList.length - 1)

@@ -1,8 +1,9 @@
+import 'dart:io'; 
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list_app/page/arsip_page.dart';
-import 'package:to_do_list_app/page/detail_tugas_page.dart';
+import 'package:to_do_list_app/page/detailTugas_page.dart';
 import 'package:to_do_list_app/page/favorit_page.dart';
 import 'package:to_do_list_app/page/home_page.dart';
 import 'package:to_do_list_app/page/kalender_page.dart';
@@ -14,63 +15,95 @@ import 'package:to_do_list_app/page/mood_page.dart';
 import 'package:to_do_list_app/page/notes_page.dart';
 import 'package:to_do_list_app/page/pengaturan_page.dart';
 import 'package:to_do_list_app/page/pengingat_page.dart';
-// import 'package:to_do_list_app/page/splashcreen.dart';
+import 'package:to_do_list_app/page/tugasKategori_page.dart';
+import 'package:to_do_list_app/page/tugasLabel_page.dart';
 import 'package:to_do_list_app/page/user_page.dart';
-import 'package:to_do_list_app/utils/token_storage.dart';
 import 'package:to_do_list_app/viewmodel/auth_viewmodel.dart';
+import 'package:to_do_list_app/viewmodel/catatanPikiran_viewmodel.dart';
+import 'package:to_do_list_app/viewmodel/kategori_user_viewmodel.dart';
 import 'package:to_do_list_app/viewmodel/kategori_viewmodel.dart';
 import 'package:to_do_list_app/viewmodel/label_viewmodel.dart';
 import 'package:to_do_list_app/viewmodel/pengaturan_viewmodel.dart';
+import 'package:to_do_list_app/viewmodel/theme_viewmodel.dart';
+import 'package:to_do_list_app/viewmodel/tugasSampingan_viewmodel.dart';
 import 'package:to_do_list_app/viewmodel/tugas_viewmodel.dart';
+import 'package:to_do_list_app/viewmodel/user_viewmodel.dart';
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides(); // ✅ Tambahkan ini
   await initializeDateFormatting('id_ID', null);
-  // await TokenStorage.saveToken('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDQvYXBpL2xvZ2luIiwiaWF0IjoxNzUxNTIyNjUwLCJleHAiOjE3NTE1MjYyNTAsIm5iZiI6MTc1MTUyMjY1MCwianRpIjoiQnliSXFTNEhmTHZNRjNlZyIsInN1YiI6IjIiLCJwcnYiOiI5YTg1NzFiMzExYmE4ZjAxMGRiZTJkMWExOGRmZmU0MDJlOWFkZDAxIn0.v8tScMrOZwnThnu74Q1d0_n8rNMv_IcbJTRGVTeMfRY');
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => TugasViewModel()),
         ChangeNotifierProvider(create: (_) => KategoriViewModel()..fetchKategori()),
-        ChangeNotifierProvider(create: (context) => LabelViewmodel()),
+        ChangeNotifierProvider(create: (_) => KategoriUserViewModel()..fetchKategoriUser()),
+        ChangeNotifierProvider(create: (context) => LabelViewModel()),
         ChangeNotifierProvider(create: (context) => PengaturanViewmodel()),
         ChangeNotifierProvider(create: (context) => AuthViewModel()),
+        ChangeNotifierProvider(create: (context) => ThemeViewModel()),
+        ChangeNotifierProvider(create: (context) => TugasSampinganViewModel()),
+        ChangeNotifierProvider(create: (context) => CatatanPikiranViewModel()),
+        ChangeNotifierProvider(create: (_) => UserViewModel()..fetchUser()),
       ],
       child: const MainApp(),
     ),
   );
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/login',
-      routes: {
-        // '/': (context) => Splashcreen(),
-        '/home': (context) => HomePage(),
-        '/pengguna': (context) => UserPage(),
-        '/kategori': (context) => KategoriPage(),
-        '/pengingat': (context) => PengingatPage(),
-        '/favorit': (context) => FavoritPage(),
-        '/arsip': (context) => ArsipPage(),
-        '/label': (context) => LabelPage(),
-        '/pengaturan': (context) => PengaturanPage(),
-        '/login': (context) => LoginPage(),
-        '/kalender': (context) => KalenderPage(),
-        '/mood': (context) => MoodPage(),
-        '/pikiran': (context) => KotakPikiranPage(),
-        '/catatan': (context) => NotesPage(),
-        '/detailtugas': (context) => DetailTugasPage(),
+    return Consumer<ThemeViewModel>(
+      builder: (context, themeVM, _) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'To Do List App',
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          themeMode: themeVM.themeMode,
+          initialRoute: '/login',
+          routes: {
+            '/home': (context) => HomePage(),
+            '/pengguna': (context) => UserPage(),
+            '/kategori': (context) => KategoriPage(),
+            '/pengingat': (context) => PengingatPage(),
+            '/favorit': (context) => FavoritPage(),
+            '/arsip': (context) => ArsipPage(),
+            '/label': (context) => LabelPage(),
+            '/pengaturan': (context) => PengaturanPage(),
+            '/login': (context) => LoginPage(),
+            '/kalender': (context) => KalenderPage(),
+            '/mood': (context) => MoodPage(),
+            '/pikiran': (context) => KotakPikiranPage(),
+            '/catatanPikiran': (context) => NotesPage(),
+            '/detailTugas': (context) => DetailTugasPage(),
+            '/tugasKategori': (context) => TugaskategoriPage(),
+            '/tugasLabel': (context) => TugaslabelPage(),
+          },
+        );
       },
     );
   }
 }
-
 
 // BATAS
 
