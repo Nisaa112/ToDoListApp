@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:to_do_list_app/model/user_model.dart' as pengguna;
@@ -20,17 +19,23 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Fetch dari API, fallback ke SQLite jika gagal
   Future<void> fetchUser() async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      final fromApi = await ApiService.fetchUser();
-      if (fromApi != null) {
-        _user = fromApi;
-        await DatabaseHelper.instance.insertUser(_user!);
+      final token = await TokenStorage.getToken();
+      final fetchedUserModel = await ApiService.fetchUser(token ?? '');
+      final fetchedData = fetchedUserModel?.data;
+      if (fetchedData != null && fetchedData.isNotEmpty) {
+        final fetchedUser = fetchedData.first;
+        _user = fetchedUser;
+
+        await DatabaseHelper.instance.clearUserTable();
+        await DatabaseHelper.instance.insertUser(fetchedUser);
         print("✅ User disimpan ke SQLite: ${_user!.name}");
+      } else {
+        print("❌ Data user kosong dari API");
       }
     } catch (e) {
       print("⚠️ Gagal ambil user dari API: $e");
@@ -47,8 +52,8 @@ class UserViewModel extends ChangeNotifier {
       final created = await ApiService.createUser(newUser);
       if (created != null) {
         _user = created;
+        await DatabaseHelper.instance.clearUserTable();
         await DatabaseHelper.instance.insertUser(_user!);
-        print("✅ User dibuat dan disimpan: ${_user!.name}");
         notifyListeners();
       }
     } catch (e) {
@@ -105,16 +110,15 @@ class UserViewModel extends ChangeNotifier {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final responseData = await http.Response.fromStream(response);
       final data = json.decode(responseData.body);
-
       final updatedUser = pengguna.Data.fromJson(data['data']);
       user = updatedUser;
+      await DatabaseHelper.instance.updateUser(updatedUser);
     } else {
       final errorResponse = await http.Response.fromStream(response);
       throw Exception("Upload gagal: ${errorResponse.body}");
     }
   }
 
-  /// Tambahkan fungsi ini agar bisa reset user (misalnya saat logout)
   void clearUser() {
     _user = null;
     notifyListeners();

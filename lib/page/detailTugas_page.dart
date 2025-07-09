@@ -11,7 +11,6 @@ import 'package:to_do_list_app/model/tugas_sampingan_model.dart' as sampingan;
 import 'package:to_do_list_app/model/ulangiTugas_model.dart';
 import 'package:to_do_list_app/viewmodel/label_viewmodel.dart';
 import 'package:to_do_list_app/viewmodel/lampiranTugas_viewmodel.dart';
-import 'package:to_do_list_app/viewmodel/tugasSampingan_viewmodel.dart';
 import 'package:to_do_list_app/viewmodel/tugas_viewmodel.dart';
 import 'package:to_do_list_app/viewmodel/kategori_user_viewmodel.dart';
 import 'package:to_do_list_app/viewmodel/catatanTugas_viewmodel.dart';
@@ -126,29 +125,6 @@ class _DetailTugasPageState extends State<DetailTugasPage> {
       final kategoriUserVM = Provider.of<KategoriUserViewModel>(context, listen: false);
       kategoriUserVM.fetchKategoriUser (); // Ambil kategori pengguna
     });
-  }
-
-  void _updateSubtaskStatus(int index, bool? value) async {
-    setState(() {
-      tugasSampinganList[index].isDone = value ?? false; // Jika value null, set ke false
-    });
-
-    // Update status di database lokal
-    final tugasSampinganVM = Provider.of<TugasSampinganViewModel>(context, listen: false);
-    
-    // Memperbarui tugas sampingan dengan judul dan status baru
-    await tugasSampinganVM.updateTugasSampingan(
-      tugasSampinganList[index], // Objek Data
-      tugasSampinganList[index].title ?? '', // Judul yang ada
-      tugasSampinganList[index].isDone ?? false // Status baru, gunakan false jika null
-    );
-
-    // Update status di API
-    try {
-      await TugasViewModel().updateTugas(tugas!); // Hanya satu argumen yang diperlukan
-    } catch (e) {
-      print("❌ Gagal mengupdate tugas: $e");
-    }
   }
 
   @override
@@ -390,48 +366,6 @@ class _DetailTugasPageState extends State<DetailTugasPage> {
                         setState(() {
                           tugas?.title = value;
                         });
-                      },
-                    ),
-                    const SizedBox(height: 1),
-                    ListView.builder(
-                      itemCount: tugasSampinganList.length,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final tugasSampingan = tugasSampinganList[index];
-                        final data = tugasSampingan;
-
-                        return ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                          leading: Checkbox(
-                            value: data?.isDone ?? false,
-                            onChanged: (val) {
-                              _updateSubtaskStatus(index, val); // Update status saat checkbox diubah
-                            },
-                          ),
-                          title: Text(
-                            data?.title ?? '(Tidak ada judul)',
-                            style: TextStyle(
-                              decoration: (data?.isDone ?? false)
-                                  ? TextDecoration.lineThrough
-                                  : null,
-                            ),
-                          ),
-                          subtitle: Text(
-                            (data?.createdAt != null)
-                                ? DateFormat('dd MMM yyyy', 'id_ID').format(DateTime.parse(data!.createdAt!))
-                                : 'Tanpa tanggal',
-                            style: TextStyle(fontSize: 12, color: Colors.blueGrey),
-                          ),
-                          trailing: IconButton(
-                            icon: Icon(Icons.delete, color: Color(0xFF485F88)),
-                            onPressed: () {
-                              setState(() {
-                                tugasSampinganList.removeAt(index);
-                              });
-                            },
-                          ),
-                        );
                       },
                     ),
 

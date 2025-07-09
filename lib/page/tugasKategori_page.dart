@@ -17,7 +17,7 @@ class _TugaskategoriPageState extends State<TugaskategoriPage> {
   @override
   Widget build(BuildContext context) {
     final tugasVM = Provider.of<TugasViewModel>(context);
-    final tugasSampinganVM = Provider.of<TugasSampinganViewModel>(context);
+    // final tugasSampinganVM = Provider.of<TugasSampinganViewModel>(context);
     final kategoriVM = Provider.of<KategoriViewModel>(context);
 
     // ✅ Ambil kategoriId dari arguments

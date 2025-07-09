@@ -35,7 +35,6 @@ class _HomeContentState extends State<HomeContent> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final kategoriVM = Provider.of<KategoriViewModel>(context, listen: false);
       final tugasVM = Provider.of<TugasViewModel>(context, listen: false);
-      final tugasSampinganVM = Provider.of<TugasSampinganViewModel>(context, listen: false);
       final labelVM = Provider.of<LabelViewModel>(context, listen: false);
       final userVM = Provider.of<UserViewModel>(context, listen: false);
 
@@ -51,7 +50,6 @@ class _HomeContentState extends State<HomeContent> {
 
       // Baru fetch tugas dan lainnya setelah kategoriId sudah ada
       await tugasVM.fetchTugas();
-      await tugasSampinganVM.fetchTugasSampingan();
       await userVM.fetchUser ();
     });
   }
@@ -366,11 +364,6 @@ class _HomeContentState extends State<HomeContent> {
                     itemCount: filteredTugas.length,
                     itemBuilder: (context, index) {
                       final tugas = filteredTugas[index];
-                      // ⏩ Dapatkan VM dan subTasks dalam urutan yang benar
-                      final tugasSampinganVM = Provider.of<TugasSampinganViewModel>(context, listen: false);
-                      final subTasks = tugasSampinganVM.tugasSampinganList
-                          .where((s) => s.todoId == tugas.id)
-                          .toList();
 
                       final tanggalFormatted = tugas.date != null
                           ? DateFormat('d MMMM yyyy', 'id_ID').format(DateTime.parse(tugas.date!))
@@ -423,21 +416,6 @@ class _HomeContentState extends State<HomeContent> {
                                               fontSize: 16,
                                             ),
                                           ),
-                                          const SizedBox(height: 2),
-                                          if (subTasks.isNotEmpty)
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: subTasks.map((sub) => Padding(
-                                                padding: const EdgeInsets.only(top: 4),
-                                                child: Text(
-                                                  '- ${sub.title}',
-                                                  style: const TextStyle(
-                                                    color: Colors.white70,
-                                                    fontSize: 13,
-                                                  ),
-                                                ),
-                                              )).toList(),
-                                            ),
                                           const SizedBox(height: 4),
                                           Container(
                                             height: 1,
@@ -502,18 +480,6 @@ class _HomeContentState extends State<HomeContent> {
                 // 💾 Simpan tugas utama ke backend
                 final tugasVM = Provider.of<TugasViewModel>(context, listen: false);
                 await tugasVM.addTugas(tugasUtama);
-
-                // 🧩 Tambahkan subtask jika ada
-                for (var sub in subTasks) {
-                  final subtask = sampingan.Data(
-                    todoId: tugasUtama.id,
-                    title: sub,
-                    isDone: false,
-                    createdAt: DateTime.now().toIso8601String(),
-                  );
-                  await ApiService.createTugasSampingan(subtask);
-                }
-
                 // 🔁 Tambahkan ulangi tugas jika diatur
                 if (repeatType != null && selectedDeadline != null) {
                   final ulangiData = ulangi.Data(

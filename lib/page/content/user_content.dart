@@ -70,7 +70,7 @@ class _UserContentState extends State<UserContent> {
       email: _emailController.text.trim(),
       createdAt: user.createdAt,
       updatedAt: DateTime.now().toIso8601String(),
-      photoProfile: user.photoProfile, // Nanti diganti kalau upload berhasil
+      photoProfile: user.photoProfile,
     );
 
     try {
@@ -130,19 +130,19 @@ class _UserContentState extends State<UserContent> {
                   child: Column(
                     children: [
                       Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(60),
-                            onTap: _pickImage,
-                            child: CircleAvatar(
-                              radius: 55,
-                              backgroundColor: Colors.grey.shade300,
-                              backgroundImage: _selectedImage != null
-                                  ? FileImage(_selectedImage!)
-                                  : NetworkImage(profileUrl) as ImageProvider,
-                            ),
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(60),
+                          onTap: _pickImage,
+                          child: CircleAvatar(
+                            radius: 55,
+                            backgroundColor: Colors.grey.shade300,
+                            backgroundImage: _selectedImage != null
+                              ? FileImage(_selectedImage!)
+                              : NetworkImage(profileUrl) as ImageProvider,
                           ),
                         ),
+                      ),
                       TextButton(
                         onPressed: _pickImage,
                         child: const Text("Ganti Foto Profil", style: TextStyle(color: Colors.blueGrey)),

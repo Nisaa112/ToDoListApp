@@ -108,155 +108,44 @@ class ApiService {
     }
   }
 
-  // Ambil semua tugas dari API
-  static Future<List<TugasModel>> fetchTugas() async {
-    final token = await TokenStorage.getToken();
-    final response = await http.get(
-      Uri.parse('${baseUrl}api/todos'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      },
-    );
-
-    print('📦 Status Code: ${response.statusCode}');
-    print('📦 Response Body: ${response.body}');
-
-    if (response.statusCode == 200) {
-      final decoded = jsonDecode(response.body);
-
-      // ✅ Pastikan ini list
-      if (decoded is List) {
-        return decoded.map((json) => TugasModel.fromJson(json)).toList();
-      } else {
-        throw Exception('Format data tugas tidak sesuai (bukan List)');
-      }
-    } else {
-      throw Exception('Gagal mengambil data tugas');
-    }
-  }
-
   // Tambah tugas baru ke API
+  static Future<List<TugasModel>> fetchTugas() async {
+    final resp = await http.get(Uri.parse('$baseUrl/todos'));
+    if (resp.statusCode == 200) {
+      return (jsonDecode(resp.body) as List)
+          .map((e) => TugasModel.fromJson(e))
+          .toList();
+    } else {
+      throw Exception('Gagal ambil tugas: ${resp.body}');
+    }
+  }
+
   static Future<TugasModel?> createTugas(TugasModel tugas) async {
-    final response = await http.post(
-      Uri.parse('${baseUrl}api/todos'),
-      headers: {
-        'Authorization': 'Bearer ${await TokenStorage.getToken()}',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        },
+    final resp = await http.post(
+      Uri.parse('$baseUrl/todos'),
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode(tugas.toJson()),
     );
-
-    print("📥 Response Create Tugas: ${response.statusCode} - ${response.body}");
-
-    if (response.statusCode == 201) {
-    final body = jsonDecode(response.body);
-    return TugasModel.fromJson(body);
+    if (resp.statusCode == 201) {
+      return TugasModel.fromJson(jsonDecode(resp.body));
     } else {
-      throw Exception('Gagal menambahkan tugas');
+      throw Exception('Gagal buat tugas: ${resp.body}');
     }
   }
 
-  // Update tugas berdasarkan ID (pastikan ada ID-nya)
   static Future<void> updateTugas(int id, TugasModel tugas) async {
-    final response = await http.put(
-      Uri.parse('${baseUrl}api/todos/$id'),
-      headers: {
-        'Authorization': 'Bearer ${await TokenStorage.getToken()}',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        },
+    final resp = await http.put(
+      Uri.parse('$baseUrl/todos/$id'),
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode(tugas.toJson()),
     );
-
-    print("📤 Response Update Tugas: ${response.statusCode} - ${response.body}");
-
-    if (response.statusCode != 200) {
-      throw Exception('Gagal mengupdate tugas');
-    }
+    if (resp.statusCode != 200) throw Exception('Gagal update tugas');
   }
 
-  // Hapus tugas berdasarkan ID
   static Future<void> deleteTugas(int id) async {
-    final response = await http.delete(
-      Uri.parse('${baseUrl}api/todos/$id'),
-      headers: {
-        'Authorization': 'Bearer ${await TokenStorage.getToken()}',
-        'Accept': 'application/json',
-      }
-    );
-
-    print("🗑️ Response Delete Tugas: ${response.statusCode} - ${response.body}");
-
-    if (response.statusCode != 200) {
-      throw Exception('Gagal menghapus tugas');
-    }
+    final resp = await http.delete(Uri.parse('$baseUrl/todos/$id'));
+    if (resp.statusCode != 200) throw Exception('Gagal hapus tugas');
   }
-
-  // CRUD tugas sampingan
-  static Future<List<Data>> fetchTugasSampingan() async {
-    final token = await TokenStorage.getToken();
-    final response = await http.get(
-      Uri.parse('${baseUrl}api/sub-tasks'),
-      headers: {'Authorization': 'Bearer $token'},
-    );
-
-    if (response.statusCode == 200) {
-      final List data = jsonDecode(response.body);
-      return data.map((e) => Data.fromJson(e)).toList();
-    } else {
-      throw Exception('Gagal mengambil tugas sampingan');
-    }
-  }
-
-  static Future<Data?> createTugasSampingan(Data data) async {
-    final token = await TokenStorage.getToken();
-    final response = await http.post(
-      Uri.parse('${baseUrl}api/sub-tasks'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(data.toJson()),
-    );
-
-    if (response.statusCode == 201 || response.statusCode == 200) {
-      final decoded = jsonDecode(response.body);
-      return decoded['data'] != null ? Data.fromJson(decoded['data']) : null;
-    } else {
-      throw Exception('Gagal menambah tugas sampingan');
-    }
-  }
-
-  static Future<void> updateTugasSampingan(Data data) async {
-    final token = await TokenStorage.getToken();
-    final response = await http.put(
-      Uri.parse('${baseUrl}api/sub-tasks/${data.id}'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(data.toJson()),
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception('Gagal update tugas sampingan');
-    }
-  }
-
-  static Future<void> deleteTugasSampingan(int id) async {
-    final token = await TokenStorage.getToken();
-    final response = await http.delete(
-      Uri.parse('${baseUrl}api/sub-tasks/$id'),
-      headers: {'Authorization': 'Bearer $token'},
-    );
-
-    if (response.statusCode != 200 && response.statusCode != 204) {
-      throw Exception('Gagal hapus tugas sampingan');
-    }
-  }
-
 
   // CRUD LABEL
   // 🔁 Fetch semua label

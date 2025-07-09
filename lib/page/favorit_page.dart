@@ -24,7 +24,6 @@ class _FavoritPageState extends State<FavoritPage> {
   @override
   Widget build(BuildContext context) {
     final tugasVM = Provider.of<TugasViewModel>(context);
-    final tugasSampinganVM = Provider.of<TugasSampinganViewModel>(context);
 
     return Scaffold(
       backgroundColor: const Color(0xFF485F88),
