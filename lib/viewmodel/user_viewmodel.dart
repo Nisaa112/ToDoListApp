@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:to_do_list_app/model/user_model.dart' as pengguna;
@@ -19,41 +20,35 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchUser() async {
-    _isLoading = true;
-    notifyListeners();
+  /// Fetch dari API, fallback ke SQLite jika gagal
+    Future<void> fetchUser() async {
+      _isLoading = true;
+      notifyListeners();
 
-    try {
-      final token = await TokenStorage.getToken();
-      final fetchedUserModel = await ApiService.fetchUser(token ?? '');
-      final fetchedData = fetchedUserModel?.data;
-      if (fetchedData != null && fetchedData.isNotEmpty) {
-        final fetchedUser = fetchedData.first;
-        _user = fetchedUser;
-
-        await DatabaseHelper.instance.clearUserTable();
-        await DatabaseHelper.instance.insertUser(fetchedUser);
-        print("✅ User disimpan ke SQLite: ${_user!.name}");
-      } else {
-        print("❌ Data user kosong dari API");
+      try {
+        final fromApi = await ApiService.fetchUser();
+        if (fromApi != null) {
+          _user = fromApi;
+          await DatabaseHelper.instance.insertUser(_user!);
+          print("✅ User disimpan ke SQLite: ${_user!.name}");
+        }
+      } catch (e) {
+        print("⚠️ Gagal ambil user dari API: $e");
+        _user = await DatabaseHelper.instance.getUser();
+        print("📦 Mengambil user dari SQLite: ${_user?.name ?? 'Tidak ada'}");
       }
-    } catch (e) {
-      print("⚠️ Gagal ambil user dari API: $e");
-      _user = await DatabaseHelper.instance.getUser();
-      print("📦 Mengambil user dari SQLite: ${_user?.name ?? 'Tidak ada'}");
-    }
 
-    _isLoading = false;
-    notifyListeners();
-  }
+      _isLoading = false;
+      notifyListeners();
+    }
 
   Future<void> createUser(pengguna.Data newUser) async {
     try {
       final created = await ApiService.createUser(newUser);
       if (created != null) {
         _user = created;
-        await DatabaseHelper.instance.clearUserTable();
         await DatabaseHelper.instance.insertUser(_user!);
+        print("✅ User dibuat dan disimpan: ${_user!.name}");
         notifyListeners();
       }
     } catch (e) {
@@ -110,15 +105,16 @@ class UserViewModel extends ChangeNotifier {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final responseData = await http.Response.fromStream(response);
       final data = json.decode(responseData.body);
+
       final updatedUser = pengguna.Data.fromJson(data['data']);
       user = updatedUser;
-      await DatabaseHelper.instance.updateUser(updatedUser);
     } else {
       final errorResponse = await http.Response.fromStream(response);
       throw Exception("Upload gagal: ${errorResponse.body}");
     }
   }
 
+  /// Tambahkan fungsi ini agar bisa reset user (misalnya saat logout)
   void clearUser() {
     _user = null;
     notifyListeners();

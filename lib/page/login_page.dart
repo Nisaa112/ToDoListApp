@@ -110,24 +110,48 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           onPressed: () async {
+                            final serial = _serialController.text.trim();
+                            final password = _passwordController.text;
+
+                            if (serial.isEmpty || password.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Serial Number dan Password tidak boleh kosong."),
+                                ),
+                              );
+                              return;
+                            }
+
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) => const Center(child: CircularProgressIndicator()),
+                            );
+
                             final authVM = Provider.of<AuthViewModel>(context, listen: false);
                             final userVM = Provider.of<UserViewModel>(context, listen: false);
 
-                            final success = await authVM.login(
-                              _serialController.text.trim(),
-                              _passwordController.text.trim(),
-                            );
-
-                            if (!mounted) return;
-
-                            if (success) {
+                            try {
+                              final authVM = Provider.of<AuthViewModel>(context, listen: false);
                               final userVM = Provider.of<UserViewModel>(context, listen: false);
-                              await userVM.fetchUser();
 
-                              Navigator.pushReplacementNamed(context, '/home');
-                            }else {
+                              await authVM.login(serial, password);
+                              
+                              if (!mounted) return;
+                              Navigator.pop(context); // Tutup loading
+
+                              // Pastikan token tersedia sebelum fetch user
+                              if (authVM.isLoggedIn && authVM.token != null) {
+                                await userVM.fetchUser(); // Ambil data user dengan token yang valid
+                                
+                                if (!mounted) return;
+                                Navigator.pushReplacementNamed(context, '/home');
+                              }
+                            } catch (e) {
+                              if (!mounted) return;
+                              Navigator.pop(context); // Tutup loading
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(authVM.errorMessage ?? "Login gagal")),
+                                SnackBar(content: Text("Error: ${e.toString()}")),
                               );
                             }
                           },

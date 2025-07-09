@@ -1,49 +1,101 @@
-import 'package:flutter/material.dart';
-import 'package:to_do_list_app/database_helper.dart';
-import 'package:to_do_list_app/model/login_response.dart';
-import 'package:to_do_list_app/model/user_model.dart' as pengguna;
-import 'package:to_do_list_app/service/api_service.dart';
-import 'package:to_do_list_app/service/auth_service.dart';
-import 'package:to_do_list_app/utils/token_storage.dart';
+  import 'package:flutter/material.dart';
+  import 'package:shared_preferences/shared_preferences.dart';
+  import 'package:to_do_list_app/service/auth_service.dart';
+  import '../model/login_response.dart';
+  import '../model/user_model.dart';
 
-class AuthViewModel extends ChangeNotifier {
-  bool isLoading = false;
-  String? errorMessage;
+  class AuthViewModel extends ChangeNotifier {
+    bool _isLoading = true;
+    bool get isLoading => _isLoading;
 
-  Future<bool> login(String serial, String password) async {
-    isLoading = true;
-    errorMessage = null;
-    notifyListeners();
+    bool _isInitialized = false;
+    bool get isInitialized => _isInitialized;
 
-    try {
-      // 🔐 Login dan dapatkan token
-      final LoginResponseModel result = await AuthService.login(serial, password);
+    bool _isLoggedIn = false;
+    bool get isLoggedIn => _isLoggedIn;
 
-      await TokenStorage.saveToken(result.token ?? '');
-      await TokenStorage.saveSerialNumber(result.serialNumber ?? '');
-      await TokenStorage.saveUserId(result.userId ?? 0);
-      await TokenStorage.saveTokenType(result.tokenType ?? '');
+    String? _name;
+    String? _serialNumber;
+    String? _photoProfile; // ✅ konsisten
+    String? _token;
 
-      // 🧑 Ambil user dari API setelah login
-      final pengguna.Data? user = await ApiService.fetchUser();
-      if (user != null) {
-        await DatabaseHelper.instance.clearUserTable(); // Hapus user sebelumnya
-        await DatabaseHelper.instance.insertUser(user);  // Simpan user baru
+    String? get name => _name;
+    String? get serialNumber => _serialNumber;
+    String? get photoProfile => _photoProfile;
+    String? get token => _token;
+
+    String? errorMessage;
+
+    Future<void> login(String serialNumber, String password) async {
+      try {
+        final loginData = await AuthService.login(serialNumber, password);
+        final userModel = await AuthService.getUserById(loginData.userId!);
+        final user = userModel.data!.first;
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', loginData.token ?? '');
+        await prefs.setString('serial_number', loginData.serialNumber ?? '');
+        await prefs.setInt('user_id', loginData.userId!);
+        await prefs.setString('name', user.name ?? '');
+        await prefs.setString('photo_profile', user.photoProfile ?? '');
+
+        _token = loginData.token;
+        _serialNumber = loginData.serialNumber;
+        _name = user.name;
+        _photoProfile = user.photoProfile;
+        _isLoggedIn = true;
+
+        notifyListeners();
+      } catch (e) {
+        rethrow;
+      }
+    }
+
+    Future<void> logout() async {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+
+      if (token != null) {
+        try {
+          await AuthService.logout(token);
+        } catch (e) {
+          // abaikan error
+        }
       }
 
-      isLoading = false;
+      await prefs.clear();
+
+      _isLoggedIn = false;
+      _token = null;
+      _name = null;
+      _serialNumber = null;
+      _photoProfile = null;
+
       notifyListeners();
-      return true;
-    } catch (e) {
-      isLoading = false;
-      errorMessage = e.toString();
+    }
+
+    Future<void> loadUserFromPrefs() async {
+      _isLoading = true;
       notifyListeners();
-      return false;
+
+      final prefs = await SharedPreferences.getInstance();
+      _token = prefs.getString('token');
+      _name = prefs.getString('name');
+      _serialNumber = prefs.getString('serial_number');
+
+      final localPhoto = prefs.getString('profile_image_path');
+      _photoProfile = localPhoto ?? prefs.getString('photo_profile');
+
+      _isLoggedIn = _token != null;
+      _isLoading = false;
+      _isInitialized = true;
+      notifyListeners();
+    }
+
+    void updateName(String newName) async {
+      _name = newName;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('name', newName);
+      notifyListeners();
     }
   }
-
-  Future<void> logout() async {
-    await TokenStorage.clearAll();
-    notifyListeners();
-  }
-}

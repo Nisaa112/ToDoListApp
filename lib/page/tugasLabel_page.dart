@@ -18,7 +18,7 @@ class _TugaslabelPageState extends State<TugaslabelPage> {
   @override
   Widget build(BuildContext context) {
     final tugasVM = Provider.of<TugasViewModel>(context);
-    // final tugasSampinganVM = Provider.of<TugasSampinganViewModel>(context);
+    final tugasSampinganVM = Provider.of<TugasSampinganViewModel>(context);
     final labelVM = Provider.of<LabelViewModel>(context);
 
     // Ambil labelId dari arguments

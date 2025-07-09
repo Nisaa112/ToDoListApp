@@ -10,12 +10,14 @@ class LoginResponseModel {
     this.userId,
     this.tokenType,
   });
-
-  LoginResponseModel.fromJson(Map<String, dynamic> json) {
-    token = json['token'];
-    serialNumber = json['serial_number'];
-    userId = json['user_id'];
-    tokenType = json['token_type'];
+ 
+  factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
+    return LoginResponseModel(
+      token: json['token'],
+      serialNumber: json['serial_number'],
+      tokenType: json['token_type'],
+      userId: json['user']?['id'], // ✅ ambil ID dari dalam user
+    );
   }
 
   Map<String, dynamic> toJson() {

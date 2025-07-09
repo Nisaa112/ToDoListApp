@@ -53,7 +53,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => PengaturanViewmodel()),
         ChangeNotifierProvider(create: (context) => AuthViewModel()),
         ChangeNotifierProvider(create: (context) => ThemeViewModel()),
-        // ChangeNotifierProvider(create: (context) => TugasSampinganViewModel()),
+        ChangeNotifierProvider(create: (context) => TugasSampinganViewModel()),
         ChangeNotifierProvider(create: (context) => CatatanPikiranViewModel()),
         ChangeNotifierProvider(create: (_) => UserViewModel()..fetchUser()),
       ],
